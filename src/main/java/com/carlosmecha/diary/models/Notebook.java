@@ -26,6 +26,10 @@ public class Notebook {
     public Notebook() {
     }
 
+    public Notebook(String name) {
+        this(nameToCode(name), name);
+    }
+
     public Notebook(String code, String name) {
         this(code, name, new Date());
     }
@@ -64,6 +68,11 @@ public class Notebook {
     @Override
     public String toString() {
         return String.format("Notebook %s: %s", code, name);
+    }
+
+    private static String nameToCode(String name) {
+        String normalized = name.toLowerCase();
+        return normalized.replaceAll("(\\s|\\.|_|-)", "");
     }
 
 }

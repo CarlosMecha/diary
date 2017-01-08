@@ -43,6 +43,16 @@ public class Page {
     public Page() {
     }
 
+    public Page(Notebook notebook, Date date, User createdBy, Set<Tag> tags) {
+        this.notebook = notebook;
+        this.date = date;
+        this.createdBy = createdBy;
+        this.tags = tags;
+        Date now = new Date();
+        this.createdOn = now;
+        this.updatedOn = now;
+    }
+
     public Integer getId() {
         return id;
     }

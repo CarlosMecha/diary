@@ -40,6 +40,13 @@ public class Comment {
     public Comment() {
     }
 
+    public Comment(Page page, String content, Date wroteOn, User wroteBy) {
+        this.page = page;
+        this.content = content;
+        this.wroteOn = wroteOn;
+        this.wroteBy = wroteBy;
+    }
+
     public Integer getId() {
         return id;
     }
