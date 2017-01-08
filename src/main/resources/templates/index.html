@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <!-- Libraries -->
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/select2/4.0.3/css/select2.min.css"/>
+    <link rel="stylesheet" href="/css/web.css"/>
+    <link rel="stylesheet" href="/css/index.css"/>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/select2/4.0.3/js/select2.min.js"></script>
+    <script src="/js/web.js"></script>
+    <script src="/js/index.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Diary</title>
+
+</head>
+<body>
+
+    <div th:include="fragments/header :: header"></div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">New Page</div>
+        <div class="panel-body">
+            <form class="form-horizontal" action="#" th:action="@{/}" th:object="${page}" method="post" >
+
+                <!-- Notebook -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="notebook">Notebook</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="notebook" th:field="*{notebookCode}"/>
+                    </div>
+                </div>
+
+                <!-- Date -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="date">Date</label>
+                    <div class="col-sm-10">
+                        <input type="date" id="date" class="form-control" aria-label="Date" th:field="*{date}"/>
+                    </div>
+                </div>
+
+                <!-- Tags -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="tags"><span class="glyphicon glyphicon-tags" aria-hidden="true"></span></label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="tags" th:field="*{tagCodes}" multiple="multiple"/>
+                    </div>
+                </div>
+
+                <!-- Text -->
+                <div class="text-input">
+                    <label for="text">Text (markdown will be supported)</label>
+                    <textarea id="text" class="form-control" rows="10" aria-label="Text" th:field="*{text}"></textarea>
+                </div>
+
+
+                <!-- Submit -->
+                <div class="form-group">
+                    <div class="btn-group col-sm-offset-2 col-sm-10" role="group">
+                        <button type="submit" class="btn btn-success">Add</button>
+                        <button type="reset" class="btn btn-default">Reset</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div th:include="fragments/footer :: footer"></div>
+
+</body>
+</html>
