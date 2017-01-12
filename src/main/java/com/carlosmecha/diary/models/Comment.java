@@ -35,7 +35,7 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "next_comment_id")
-    private Comment nextCommentId;
+    private Comment nextComment;
 
     public Comment() {
     }
@@ -95,11 +95,11 @@ public class Comment {
         this.previousComment = previousComment;
     }
 
-    public Comment getNextCommentId() {
-        return nextCommentId;
+    public Comment getNextComment() {
+        return nextComment;
     }
 
-    public void setNextCommentId(Comment nextCommentId) {
-        this.nextCommentId = nextCommentId;
+    public void setNextComment(Comment nextComment) {
+        this.nextComment = nextComment;
     }
 }

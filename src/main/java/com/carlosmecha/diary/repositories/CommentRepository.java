@@ -1,11 +1,11 @@
 package com.carlosmecha.diary.repositories;
 
 import com.carlosmecha.diary.models.Comment;
-import com.carlosmecha.diary.models.Page;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Comment repository
@@ -15,6 +15,6 @@ import java.util.Set;
 public interface CommentRepository extends PagingAndSortingRepository<Comment, Integer>{
 
     @Query("SELECT c FROM Comment c WHERE c.page.id = :id")
-    Set<Page> findAllByPageId(int id);
+    List<Comment> findAllByPageId(@Param("id") int id);
 
 }

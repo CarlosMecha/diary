@@ -100,4 +100,12 @@ public class Page {
     public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
     }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
 }

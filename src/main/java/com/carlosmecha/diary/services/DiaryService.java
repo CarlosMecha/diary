@@ -10,9 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Diary service
@@ -123,6 +121,68 @@ public class DiaryService {
         comments.save(comment);
 
         return page;
+    }
+
+    public List<Page> getPages(String notebookCode) {
+        logger.debug("Looking for pages for {}", notebookCode);
+        return pages.findAllByNotebookCode(notebookCode);
+    }
+
+    public List<Integer> getPageIds(String notebookCode) {
+        logger.debug("Looking for page ids for {}", notebookCode);
+        return pages.findAllIdsByNotebookCode(notebookCode);
+    }
+
+    public Page getPage(int id) {
+        logger.debug("Looking for page {}", id);
+        return pages.findOne(id);
+    }
+
+    public Page getFirstPage(String notebookCode) {
+        logger.debug("Looking for the first page of {}", notebookCode);
+        List<Page> pags = pages.findAllByNotebookCode(notebookCode, new PageRequest(0, 1, Sort.Direction.ASC, "date"));
+        if(pags.isEmpty()) {
+            return null;
+        }
+        return pags.get(0);
+    }
+
+    public Page getLastPage(String notebookCode) {
+        logger.debug("Looking for the last page of {}", notebookCode);
+        List<Page> pags = pages.findAllByNotebookCode(notebookCode, new PageRequest(0, 1, Sort.Direction.DESC, "date"));
+        if(pags.isEmpty()) {
+            return null;
+        }
+        return pags.get(0);
+    }
+
+    public List<Comment> getSortedComments(int pageId) {
+        List<Comment> commts = comments.findAllByPageId(pageId);
+        if(commts.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Sorting
+        List<Comment> sortedComments = new LinkedList<>();
+        Map<Integer, Comment> map = new HashMap<>();
+        for(Comment comment : commts) {
+            map.put(comment.getId(), comment);
+        }
+
+        int count = 0;
+        Comment next = commts.get(0);
+        while(next != null) {
+            sortedComments.add(next);
+            next = next.getNextComment();
+            count++;
+        }
+
+        if(count != commts.size()) {
+            logger.error("Inconsistent comment ordering for page {}", pageId);
+        }
+
+        return sortedComments;
+
     }
 
 }

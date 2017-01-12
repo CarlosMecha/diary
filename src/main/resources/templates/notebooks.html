@@ -37,7 +37,7 @@
             </thead>
             <tbody>
                 <tr th:each="n: ${notebooks}">
-                    <td th:with="url=@{/notebooks} + '/' + ${n.code} + '/pages/0'" th:text="${n.code}" class="pageLink" th:href="${url}">Code</td>
+                    <td th:with="url=@{/notebooks} + '/' + ${n.code} + '/pages/first'" th:text="${n.code}" class="pageLink" th:href="${url}">Code</td>
                     <td th:text="${n.name}">Name</td>
                     <td th:text="${n.createdOn}">Date</td>
                 </tr>

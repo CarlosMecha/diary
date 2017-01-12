@@ -1,9 +1,12 @@
 package com.carlosmecha.diary.repositories;
 
 import com.carlosmecha.diary.models.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -13,7 +16,13 @@ import java.util.Set;
  */
 public interface PageRepository extends PagingAndSortingRepository<Page, Integer>{
 
-    @Query("SELECT p FROM Page p WHERE p.notebook.id = :id")
-    Set<Page> findAllByNotebookId(int id);
+    @Query("SELECT p FROM Page p WHERE p.notebook.code = :code ORDER BY p.date")
+    List<Page> findAllByNotebookCode(@Param("code") String notebookCode);
+
+    @Query("SELECT p FROM Page p WHERE p.notebook.code = :code")
+    List<Page> findAllByNotebookCode(@Param("code") String notebookCode, Pageable pageable);
+
+    @Query("SELECT p.id FROM Page p WHERE p.notebook.code = :code ORDER BY p.date")
+    List<Integer> findAllIdsByNotebookCode(@Param("code") String notebookCode);
 
 }
