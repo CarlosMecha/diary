@@ -117,7 +117,7 @@ public class DiaryService {
         Page page = new Page(notebook, date, requester, tagSet);
         pages.save(page);
 
-        Comment comment = new Comment(page, text, date, requester);
+        Comment comment = new Comment(page, text, new Date(), requester);
         comments.save(comment);
 
         return page;

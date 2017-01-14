@@ -1,8 +1,11 @@
 package com.carlosmecha.diary.controllers;
 
+import com.carlosmecha.diary.models.Comment;
 import com.carlosmecha.diary.models.Page;
 import com.carlosmecha.diary.models.User;
 import com.carlosmecha.diary.services.DiaryService;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Notebooks controller.
@@ -27,10 +31,14 @@ public class NotebooksController {
     private final static Logger logger = LoggerFactory.getLogger(NotebooksController.class);
 
     private DiaryService diary;
+    private Parser parser;
+    private HtmlRenderer renderer;
 
     @Autowired
-    public NotebooksController(DiaryService diary) {
+    public NotebooksController(DiaryService diary, Parser parser, HtmlRenderer renderer) {
         this.diary = diary;
+        this.parser = parser;
+        this.renderer = renderer;
     }
 
     /**
@@ -101,7 +109,7 @@ public class NotebooksController {
                 int index = first ? 0 : ids.size() - 1;
 
                 model.addAttribute("page", diary.getPage(ids.get(index)));
-                model.addAttribute("comments", diary.getSortedComments(ids.get(index)));
+                model.addAttribute("comments", renderComments(diary.getSortedComments(ids.get(index))));
                 if(ids.size() > 1) {
                     if(first) {
                         model.addAttribute("next", ids.get(1));
@@ -125,7 +133,7 @@ public class NotebooksController {
         }
 
         model.addAttribute("page", page);
-        model.addAttribute("comments", diary.getSortedComments(id));
+        model.addAttribute("comments", renderComments(diary.getSortedComments(id)));
         List<Integer> ids = diary.getPageIds(notebookCode);
         int prev = -1;
         int i = 0;
@@ -147,8 +155,43 @@ public class NotebooksController {
         return "page";
     }
 
+    private List<RenderedComment> renderComments(List<Comment> comments) {
+        return comments.stream().map(c ->
+                    new RenderedComment(c.getWroteBy().getName(), c.getWroteOn(),
+                            renderer.render(parser.parse(c.getContent()))))
+                .collect(Collectors.toList());
+    }
+
     private User getLoggerUser(Principal principal) {
         return diary.getUser(principal.getName());
+    }
+
+    /**
+     * Category render model
+     */
+    public static class RenderedComment {
+
+        private String wroteBy;
+        private Date wroteOn;
+        private String content;
+
+        public RenderedComment(String wroteBy, Date wroteOn, String content) {
+            this.wroteBy = wroteBy;
+            this.wroteOn = wroteOn;
+            this.content = content;
+        }
+
+        public String getWroteBy() {
+            return wroteBy;
+        }
+
+        public Date getWroteOn() {
+            return wroteOn;
+        }
+
+        public String getContent() {
+            return content;
+        }
     }
 
     /**
